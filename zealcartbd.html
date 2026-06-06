@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="../assets/Favicon.png" />
+    <title>ZealcartBD - Online Store</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f5f5f5;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* ── Keyframes ── */
+      @keyframes fadeDown {
+        from {
+          opacity: 0;
+          transform: translateY(-24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.88);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: -400px 0;
+        }
+        100% {
+          background-position: 400px 0;
+        }
+      }
+      @keyframes cartBounce {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        }
+        25% {
+          transform: translate(-50%, -58%) scale(1.1) rotate(-6deg);
+        }
+        75% {
+          transform: translate(-50%, -44%) scale(0.95) rotate(4deg);
+        }
+      }
+      @keyframes ripple {
+        0% {
+          transform: scale(0);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+      @keyframes heroPulse {
+        0%,
+        100% {
+          opacity: 0.18;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.32;
+          transform: scale(1.06);
+        }
+      }
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-28px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* ── App shell ── */
+      .app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
+      /* ── Hero ── */
+      .hero {
+        width: 100%;
+        background: #1f9821;
+        clip-path: polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%);
+        padding: 50px 16px 130px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* animated background circles */
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.12);
+        animation: heroPulse 4s ease-in-out infinite;
+      }
+      .hero::before {
+        width: 320px;
+        height: 320px;
+        top: -80px;
+        right: -80px;
+        animation-delay: 0s;
+      }
+      .hero::after {
+        width: 200px;
+        height: 200px;
+        bottom: 40px;
+        left: -50px;
+        animation-delay: 2s;
+      }
+
+      .brand-name {
+        color: #fff;
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 1;
+        animation: fadeDown 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      /* ── Store card ── */
+      .store-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 10px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 8px 40px rgba(0, 31, 14, 0.15);
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        animation: scaleIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+      }
+
+      .store-banner {
+        width: 100%;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #1f9821 0%, #145f15 100%);
+        height: 320px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .logo-image img {
+        width: 100%;
+      }
+
+      .logo-image {
+        padding: 30px;
+        background: #fffffffa;
+        border-radius: 20px;
+        max-width: 394px;
+      }
+
+      /* shimmer sweep */
+      .store-banner::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.18) 50%,
+          transparent 100%
+        );
+        background-size: 400px 100%;
+        animation: shimmer 2.4s linear infinite;
+      }
+
+      .store-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #131d29;
+        margin: 12px 0 8px;
+      }
+
+      /* ── Content area ── */
+      .content {
+        width: 100%;
+        max-width: 500px;
+        padding: 0 16px;
+        margin-top: -44px;
+        position: relative;
+        z-index: 10;
+        padding-top: 100px;
+      }
+
+      /* ── Section title ── */
+      .section-title {
+        font-size: 2.1rem;
+        font-weight: 600;
+        color: #131d29;
+        margin: 24px 0 10px;
+        animation: fadeUp 0.6s ease 0.4s both;
+        text-align: center;
+        padding-bottom: 40px;
+      }
+      /* ── Social links ── */
+      .social-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        background: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        box-shadow: 1px 6px 30px rgba(0, 31, 14, 0.05);
+        position: relative;
+        overflow: hidden;
+        /* staggered entrance */
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          transform 0.22s ease,
+          box-shadow 0.22s ease,
+          opacity 0.22s ease;
+      }
+
+      /* ripple overlay */
+      .social-link .ripple-el {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(31, 152, 33, 0.18);
+        width: 10px;
+        height: 10px;
+        pointer-events: none;
+        animation: ripple 0.6s linear forwards;
+      }
+
+      .social-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 36px rgba(0, 31, 14, 0.12);
+      }
+
+      .social-link-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .social-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+        transition: transform 0.25s ease;
+      }
+
+      .social-link:hover .social-icon {
+        transform: scale(1.12) rotate(-4deg);
+      }
+
+      .icon-whatsapp {
+        background: #25d366;
+      }
+      .icon-facebook {
+        background: #1877f2;
+      }
+      .icon-instagram {
+        background: linear-gradient(
+          135deg,
+          #f09433,
+          #e6683c,
+          #dc2743,
+          #cc2366,
+          #bc1888
+        );
+      }
+
+      .social-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #131d29;
+      }
+
+      .chevron {
+        color: #767c83;
+        font-size: 20px;
+        transition: transform 0.2s ease;
+      }
+      .social-link:hover .chevron {
+        transform: translateX(4px);
+      }
+
+      /* ── Contact card ── */
+      .contact-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px 14px;
+        box-shadow: 1px 6px 30px rgba(0, 31, 14, 0.05);
+        margin-bottom: 36px;
+        opacity: 0;
+        transform: translateY(24px);
+        transition: box-shadow 0.3s ease;
+      }
+
+      .contact-card:hover {
+        box-shadow: 0 12px 40px rgba(0, 31, 14, 0.1);
+      }
+
+      .contact-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .contact-icon-box {
+        width: 44px;
+        height: 44px;
+        background: #f9f9f9;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+      .contact-icon-box img {
+        width: 26px;
+      }
+      .contact-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #131d29;
+      }
+
+      .divider {
+        height: 1px;
+        background: #f2f2f2;
+        border-radius: 99px;
+        margin: 12px 0;
+      }
+
+      .contact-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 6px 0;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        border-radius: 6px;
+        transition:
+          background 0.18s ease,
+          transform 0.18s ease;
+      }
+
+      .contact-row:hover {
+        background: #f7fdf7;
+        transform: translateX(4px);
+      }
+
+      .contact-row-icon {
+        width: 40px;
+        height: 40px;
+        background: #f9f9f9;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+        transition:
+          background 0.18s ease,
+          transform 0.2s ease;
+      }
+
+      .contact-row:hover .contact-row-icon {
+        background: #e8f8e8;
+        transform: scale(1.1);
+      }
+
+      .contact-row-text p:first-child {
+        font-size: 11px;
+        color: #767c83;
+      }
+      .contact-row-text p:last-child {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #131d29;
+      }
+      .footer {
+        padding: 27px 20px;
+        background: #1f9821;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      /* ── Visible state (JS toggled) ── */
+      .visible {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      /* Screen sizes below 769px */
+      @media (max-width: 768px) {
+        .content {
+          padding-top: 70px;
+        }
+      }
+
+      /* Screen sizes below 500px */
+      @media (max-width: 499px) {
+        .logo-image {
+          max-width: 300px;
+        }
+
+        .store-card {
+          margin-bottom: 40px;
+        }
+      }
+
+      /* Screen sizes below 400px */
+      @media (max-width: 399px) {
+        .store-banner {
+          height: 260px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero {
+          padding-bottom: 110px;
+        }
+        .store-title {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Hero -->
+      <div class="hero">
+        <h1 class="brand-name">ZealcartBD</h1>
+        <div class="store-card">
+          <div class="store-banner">
+            <div class="logo-image">
+              <img src="../assets/Zealcartbd-logo.png" alt="" />
+            </div>
+          </div>
+          <h2 class="store-title">Online Store</h2>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <p class="section-title">Our Social Networks</p>
+        <div class="social-list">
+          <a
+            href="https://wa.me/8801776584898"
+            target="_blank"
+            rel="noreferrer"
+            class="social-link"
+          >
+            <div class="social-link-left">
+              <div class="social-icon icon-whatsapp">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+                  />
+                </svg>
+              </div>
+              <div><div class="social-name">WhatsApp</div></div>
+            </div>
+            <span class="chevron">›</span>
+          </a>
+
+          <a
+            href="https://www.facebook.com/zealcartbd"
+            target="_blank"
+            rel="noreferrer"
+            class="social-link"
+          >
+            <div class="social-link-left">
+              <div class="social-icon icon-facebook">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                  />
+                </svg>
+              </div>
+              <div><div class="social-name">Facebook</div></div>
+            </div>
+            <span class="chevron">›</span>
+          </a>
+
+          <a
+            href="https://www.instagram.com/zealcartbd/"
+            target="_blank"
+            rel="noreferrer"
+            class="social-link"
+          >
+            <div class="social-link-left">
+              <div class="social-icon icon-instagram">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"
+                  />
+                </svg>
+              </div>
+              <div><div class="social-name">Instagram</div></div>
+            </div>
+            <span class="chevron">›</span>
+          </a>
+        </div>
+
+        <!-- Contact -->
+        <div class="contact-card" style="margin-top: 20px">
+          <div class="contact-header">
+            <div class="contact-icon-box">
+              <img src="../assets/menu.png" alt="" />
+            </div>
+            <span class="contact-label">Contact</span>
+          </div>
+          <div class="divider"></div>
+
+          <a href="tel:+8801776584898" class="contact-row">
+            <div class="contact-row-icon">📞</div>
+            <div class="contact-row-text">
+              <p>Call Us</p>
+              <p>+8801776-584898</p>
+            </div>
+          </a>
+          <div class="divider"></div>
+
+          <a href="mailto:zealcartbd@gmail.com" class="contact-row">
+            <div class="contact-row-icon">✉️</div>
+            <div class="contact-row-text">
+              <p>Email</p>
+              <p>zealcartbd@gmail.com</p>
+            </div>
+          </a>
+          <!-- <div class="divider"></div>
+
+          <a
+            href="https://www.zealcartbd.com"
+            target="_blank"
+            rel="noreferrer"
+            class="contact-row"
+          >
+            <div class="contact-row-icon">🌐</div>
+            <div class="contact-row-text">
+              <p>Website</p>
+              <p>www.zealcartbd.com</p>
+            </div>
+          </a> -->
+        </div>
+      </div>
+      <div class="footer">
+        <p>&copy; 2026 ZealcardBD. All rights reserved.</p>
+      </div>
+    </div>
+
+    <script>
+      // Staggered entrance for social links
+      const links = document.querySelectorAll(".social-link");
+      links.forEach((el, i) => {
+        setTimeout(() => el.classList.add("visible"), 500 + i * 120);
+      });
+
+      // Contact card entrance
+      const card = document.querySelector(".contact-card");
+      setTimeout(() => card.classList.add("visible"), 900);
+
+      // Ripple effect on social links
+      links.forEach((link) => {
+        link.addEventListener("click", function (e) {
+          const r = document.createElement("span");
+          r.className = "ripple-el";
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height) * 2;
+          r.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${e.clientX - rect.left - size / 2}px;
+        top:${e.clientY - rect.top - size / 2}px;
+      `;
+          this.appendChild(r);
+          setTimeout(() => r.remove(), 650);
+        });
+      });
+    </script>
+  </body>
+</html>
