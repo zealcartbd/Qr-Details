@@ -228,6 +228,62 @@
         padding-top: 100px;
       }
 
+       /* ── Banner code ── */
+
+      .banner-wrapper {
+            width: 100%;
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* The main stylish card */
+        .construction-card {
+            background-color: #fcfbfa; /* Off-white textured tone */
+            border: 2px solid #d4af37;  /* Elegant gold border */
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        /* Large Header Text */
+        .construction-card h2 {
+            color: #0d4022; /* Deep forest green */
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* Subtitle Description Text */
+        .construction-card p {
+            color: #222222; /* Dark graphite for readability */
+            font-size: 1.15rem;
+            line-height: 1.6;
+            font-weight: 400;
+            margin: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Responsive design for smaller mobile screens */
+        @media (max-width: 480px) {
+            .construction-card {
+                padding: 25px 15px;
+            }
+            .construction-card h1 {
+                font-size: 1.7rem;
+            }
+            .construction-card p {
+                font-size: 1rem;
+            }
+        }
+      
+
       /* ── Section title ── */
       .section-title {
         font-size: 2.1rem;
@@ -483,6 +539,7 @@
           font-size: 1.2rem;
         }
       }
+      
     </style>
   </head>
   <body>
@@ -502,6 +559,12 @@
 
       <!-- Content -->
       <div class="content">
+        <div class="banner-wrapper">
+        <div class="construction-card">
+            <h2>We’re building something great!</h2>
+            <p>While our official store is under construction, you can still shop directly through our social media channels below.</p>
+        </div>
+    </div>
         <p class="section-title">Our Social Networks</p>
         <div class="social-list">
           <a
